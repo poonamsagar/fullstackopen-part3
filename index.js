@@ -24,6 +24,11 @@ let persons=[
         number: 67898789,
         id:4
     },
+    {
+    name:"John",
+    number:56757787,
+    id: 5
+    },
 ];
 app.get("/",(req,res)=>{
     res.send("<h1>This is Phonebook rest api</h1>");
@@ -32,6 +37,11 @@ app.get("/",(req,res)=>{
 app.get("/api/persons",(req,res)=>{
     res.json(persons);
 });
+
+app.get("/info",(req,res)=>{
+    res.send(`<h3>Phonebook has info for ${persons.length} people</h3><h3>${new Date()}</h3>`);
+});
+
 
 const PORT = 3001;
 app.listen(PORT);
