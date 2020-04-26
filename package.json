@@ -1,0 +1,27 @@
+{
+  "name": "fullstackopen-part3",
+  "version": "1.0.0",
+  "description": "Fullstack open part 3 course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev":"nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/poonamsagar/fullstackopen-part3.git"
+  },
+  "author": "Poonam Sagar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/poonamsagar/fullstackopen-part3/issues"
+  },
+  "homepage": "https://github.com/poonamsagar/fullstackopen-part3#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}
