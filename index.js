@@ -4,6 +4,7 @@ const cors = require('cors');
 const Person = require('./models/person');
 const express = require('express');
 const app = express();
+const errorHandler = require('./middleware/errorHandler');
 
 morgan.token('body', (req) => JSON.stringify(req.body));
 app.use(cors());
@@ -68,11 +69,12 @@ app.get('/api/persons/:id', (request, response) => {
   }
 });
 
-app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id);
-  persons = persons.filter((person) => person.id !== id);
-
-  response.status(204).end();
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndRemove(request.params.id)
+    .then((result) => {
+      response.status(204).end();
+    })
+    .catch((error) => next(error));
 });
 
 const generatedId = () => Math.floor(Math.random() * 100000 + 5);
@@ -94,6 +96,7 @@ app.post('/api/persons', (request, response) => {
   });
 });
 
+app.use(errorHandler);
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on this port ${PORT}`);
