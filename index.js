@@ -13,33 +13,6 @@ app.use(
   morgan(':method :url :status :res[content-length] - :response-time ms :body')
 );
 
-let persons = [
-  {
-    name: 'Arto Hellas',
-    number: 67890000,
-    id: 1,
-  },
-  {
-    name: 'Ada Lovelace',
-    number: 34567567,
-    id: 2,
-  },
-  {
-    name: 'Dan Abramov',
-    number: 123432343,
-    id: 3,
-  },
-  {
-    name: 'Mary Poppendieck',
-    number: 67898789,
-    id: 4,
-  },
-  {
-    name: 'John',
-    number: 56757787,
-    id: 5,
-  },
-];
 app.get('/', (req, res) => {
   res.send('<h1>This is Phonebook rest api</h1>');
 });
@@ -51,22 +24,25 @@ app.get('/api/persons', (req, res) => {
 });
 
 app.get('/info', (req, res) => {
-  res.send(
-    `<h3>Phonebook has info for ${
-      persons.length
-    } people</h3><h3>${new Date()}</h3>`
-  );
+  Person.find({}).then((people) => {
+    res.send(
+      `<h3>Phonebook has info for ${
+        people.length
+      } people</h3><h3>${new Date()}</h3>`
+    );
+  });
 });
 
-app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id);
-
-  const person = persons.find((person) => person.id === id);
-  if (person) {
-    response.json(person);
-  } else {
-    response.status(404).end();
-  }
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+    .then((person) => {
+      if (person) {
+        response.json(person.toJSON());
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((error) => next(error));
 });
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -76,8 +52,6 @@ app.delete('/api/persons/:id', (request, response, next) => {
     })
     .catch((error) => next(error));
 });
-
-const generatedId = () => Math.floor(Math.random() * 100000 + 5);
 
 app.post('/api/persons', (request, response) => {
   const body = request.body;
