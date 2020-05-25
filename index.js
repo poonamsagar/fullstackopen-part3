@@ -96,6 +96,18 @@ app.post('/api/persons', (request, response) => {
   });
 });
 
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body;
+  const person = {
+    number: body.number,
+  };
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then((updatePerson) => {
+      response.json(updatePerson.toJSON());
+    })
+    .catch((error) => next(error));
+});
+
 app.use(errorHandler);
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
