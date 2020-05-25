@@ -5,6 +5,7 @@ const Person = require('./models/person');
 const express = require('express');
 const app = express();
 const errorHandler = require('./middleware/errorHandler');
+const unknownEndPoint = require('./middleware/unknownRouteHandler');
 
 morgan.token('body', (req) => JSON.stringify(req.body));
 app.use(cors());
@@ -81,7 +82,7 @@ app.put('/api/persons/:id', (request, response, next) => {
     })
     .catch((error) => next(error));
 });
-
+app.use(unknownEndPoint);
 app.use(errorHandler);
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
